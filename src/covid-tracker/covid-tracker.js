@@ -8,7 +8,7 @@ class CovidTracker extends React.Component {
     feeds: null
   }
   componentDidMount() {
-    axios.get(`https://coronavirus-tracker-api.herokuapp.com/v2/locations`)
+    axios.get(`https://coronavirus-tracker-api.herokuapp.com/v2/locations?source=jhu`)
     .then(res => {
         console.log(res.request.response);
         const feeds = JSON.parse(res.request.response);
