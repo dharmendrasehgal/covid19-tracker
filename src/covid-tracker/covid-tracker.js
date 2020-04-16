@@ -8,11 +8,11 @@ class CovidTracker extends React.Component {
     feeds: null
   }
   componentDidMount() {
-    axios.get(`https://coronavirus-tracker-api.herokuapp.com/v2/locations?source=jhu`)
+    axios.get(`https://covid19.mathdro.id/api/confirmed`)
     .then(res => {
-        console.log(res.request.response);
-        const feeds = JSON.parse(res.request.response);
-        this.setState({feeds: feeds.locations});
+        console.log(res.data);
+        const feeds = res.data;
+        this.setState({feeds: feeds});
     })
     .catch(err => {
         console.log('Err: ', err);
@@ -25,9 +25,8 @@ class CovidTracker extends React.Component {
             <table className="table table-light">
               <thead className="table-bordered fixed-header">
                 <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Country</th>
-                  <th scope="col">Population</th>
+                  <th scope="col">Code</th>
+                  <th scope="col">countryRegion</th>
                   <th scope="col">Confirmed</th>
                   <th scope="col">Deaths</th>
                   <th scope="col">Recovered</th>
