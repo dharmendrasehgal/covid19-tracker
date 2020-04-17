@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import logo from '../logo.svg';
 
@@ -22,6 +23,7 @@ class StatesTracker extends React.Component {
         {!this.state.feeds ? <img src={logo} className="App-logo" alt="logo" /> :
         <section>
           <h1>COVID 19, Coronavirus Tracker in India</h1>
+          <span className="text-muted small float-right"><Link to="/">Worldwide Cases</Link></span>
           {this.state.feeds.lastOriginUpdate && <p className="text-success">Last Updated: { this.state.feeds.lastOriginUpdate }</p>}
           {!this.state.feeds.data.summary ? null :
           <article>
