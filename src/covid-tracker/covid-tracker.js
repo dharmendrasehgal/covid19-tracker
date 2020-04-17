@@ -42,6 +42,7 @@ class CovidTracker extends React.Component {
     return <div className="covid-wrapper">
         {!this.state.feeds ? <img src={logo} className="App-logo" alt="logo" /> :
         <section>
+          <h1>COVID 19, Coronavirus Tracker</h1>
           {this.state.worldwide.lastUpdate && <p className="text-success">Last Updated: { Date(this.state.worldwide.lastUpdate) }</p>}
           {!this.state.nationwide ? null :
           <article>
