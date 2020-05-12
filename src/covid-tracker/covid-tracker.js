@@ -43,40 +43,9 @@ class CovidTracker extends React.Component {
     return <div className="covid-wrapper">
         {!this.state.feeds ? <img src={logo} className="App-logo" alt="logo" /> :
         <section>
-          <h1>COVID 19, Coronavirus Tracker</h1>
-          <span className="text-muted small float-right"><Link to="/indian-states">Indian State Cases</Link></span>
+          <h5>COVID 19, Coronavirus Tracker</h5>
+          <span className="text-muted small float-right"><Link to="/">Indian State Cases</Link></span>
           {this.state.worldwide.lastUpdate && <p className="text-success">Last Updated: { this.state.worldwide.lastUpdate }</p>}
-          {!this.state.nationwide ? null :
-          <article>
-              <h2>India Cases</h2>
-              <div className="row mb-5">
-                  <div className="col-sm-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-warning">{ this.state.nationwide.confirmed.value }</h3>
-                        <p className="card-text text-muted">Confirmed</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-danger">{ this.state.nationwide.deaths.value }</h3>
-                        <p className="card-text text-muted">Death</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-success">{ this.state.nationwide.recovered.value }</h3>
-                        <p className="card-text text-muted">Recovered</p>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-           </article>
-            }
           {!this.state.worldwide ? null :
           <article>
               <h2>Global Cases</h2>
@@ -108,11 +77,11 @@ class CovidTracker extends React.Component {
               </div>
            </article>
             }
-          <div className="table-responsive">
-            <table className="table table-bordered">
-              <thead className="fixed-header">
+          <div className="text-center">
+            <table className="m-auto">
+              <thead className="">
                 <tr>
-                  <th scope="col">Country/Region</th>
+                  <th className="text-left" scope="col">Country/Region</th>
                   <th scope="col">Confirmed</th>
                   <th scope="col">Deaths</th>
                   <th scope="col">Recovered</th>

@@ -8,10 +8,10 @@ class StatesTracker extends React.Component {
     feeds: null
   }
   componentDidMount() {
-    axios.get(`https://api.rootnet.in/covid19-in/stats/latest`)
+    axios.get(`https://api.covid19india.org/data.json`)
     .then(res => {
         console.log(res.data);
-        const feeds = res.data.success ? res.data: null;
+        const feeds = res.data ? res.data: null;
         this.setState({feeds: feeds});
     })
     .catch(err => {
@@ -21,78 +21,58 @@ class StatesTracker extends React.Component {
   render() {
     return <div className="covid-wrapper">
         {!this.state.feeds ? <img src={logo} className="App-logo" alt="logo" /> :
-        <section>
-          <h1>COVID 19, Coronavirus Tracker in India</h1>
-          <span className="text-muted small float-right"><Link to="/">Worldwide Cases</Link></span>
-          {this.state.feeds.lastOriginUpdate && <p className="text-success">Last Updated: { this.state.feeds.lastOriginUpdate }</p>}
-          {!this.state.feeds.data.summary ? null :
-          <article>
-              <h2>India Cases</h2>
-              <div className="row mb-5">
-                  <div className="col-sm-4 mb-5">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-warning">{ this.state.feeds.data.summary.total }</h3>
-                        <p className="card-text text-muted">Total</p>
+        <section className="text-center">
+          <h4>COVID 19, Coronavirus Tracker in India</h4>
+          <span className="text-muted small float-right"><Link to="/covid19-tracker">Worldwide Cases</Link></span>
+          {this.state.feeds.statewise.map((item, index) => {
+            return (item.state === 'Total' && <article className="row mb-5" key={index}>
+              <div className="mx-auto d-flex">
+                      <div className="card-body p-3 text-danger">
+                        <p className="">Confirmed</p>
+                        <h6><span className="text-danger">{item.deltaconfirmed > 0 && '[+'+ item.deltaconfirmed +']'}</span></h6>
+                        <h5>{ item.confirmed }</h5>
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4 mb-5">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-warning">{ this.state.feeds.data.summary.confirmedCasesIndian }</h3>
-                        <p className="card-text text-muted">Confirmed</p>
+                      <div className="card-body p-3 text-primary">
+                        <p className="">Active</p>
+                        <h6><span className="text-danger"><br /></span></h6>
+                        <h5>{ item.active }</h5>
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4 mb-5">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-warning">{ this.state.feeds.data.summary.confirmedCasesForeign }</h3>
-                        <p className="card-text text-muted">Foreign Cases</p>
+                      <div className="card-body p-3 text-success">
+                        <p className="">Recovered</p>
+                        <h6><span>{item.deltarecovered > 0 && '[+'+ item.deltarecovered +']'}</span></h6>
+                        <h5>{ item.recovered }</h5>
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4 mb-5">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-danger">{ this.state.feeds.data.summary.deaths }</h3>
-                        <p className="card-text text-muted">Death</p>
+                      <div className="card-body p-3 text-muted">
+                        <p className="">Deceased</p>
+                        <h6><span>{item.deltadeaths > 0 && '[+'+ item.deltadeaths +']'}</span></h6>
+                        <h5>{ item.deaths }</h5>
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4 mb-5">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-success">{ this.state.feeds.data.summary.discharged }</h3>
-                        <p className="card-text text-muted">Recovered</p>
-                      </div>
-                    </div>
-                  </div>
               </div>
-           </article>
-            }
-            {!this.state.feeds.data.regional ? null :
+           </article>)
+          })
+          }
+          {!this.state.feeds.statewise ? null :
           <article>
-          <span className="text-muted small float-right"><a href="https://api.rootnet.in/covid19-in/stats/latest" target="_blank" rel="noopener noreferrer">#api</a></span>
-              <h2>Indian State Cases</h2>
-              <div className="table-responsive">
-            <table className="table table-bordered">
-              <thead className="fixed-header">
+          <span className="text-muted small float-right"><a href="https://api.covid19india.org/" target="_blank" rel="noopener noreferrer">#api</a></span>
+              <div className="text-center">
+            <table className="m-auto">
+              <thead className="">
                 <tr>
-                  <th scope="col">Region</th>
-                  <th scope="col">Confirmed</th>
-                  <th scope="col">Recovered</th>
-                  <th scope="col">Deaths</th>
+                  <th className="text-default text-left" scope="col">State/UT</th>
+                  <th className="text-default" scope="col">Confirmed</th>
+                  <th className="text-default" scope="col">Active</th>
+                  <th className="text-default" scope="col">Recovered</th>
+                  <th className="text-default" scope="col">Deceased</th>
                 </tr>
               </thead>
               <tbody>
-              {this.state.feeds.data.regional.map((item, index) => {
-              return (<tr>
-                  <td className="text-muted">{ item.loc }</td>
-                  <td className="text-warning">{ item.totalConfirmed }</td>
-                  <td className="text-success">{ item.discharged }</td>
-                  <td className="text-danger">{ item.deaths }</td>
+              {this.state.feeds.statewise.map((item, index) => {
+              return (<tr key={index}>
+                  <td className="text-muted text-left">{ item.state }</td>
+                  <td className="text-muted text-right"><span className="text-danger">{item.deltaconfirmed > 0 && '[+'+ item.deltaconfirmed +']'}</span> { item.confirmed }</td>
+                  <td className="text-muted text-right">{ item.active }</td>
+                  <td className="text-muted text-right"><span className="text-success">{item.deltarecovered > 0 && '[+'+ item.deltarecovered +']'}</span> { item.recovered }</td>
+                  <td className="text-muted text-right"><span>{item.deltadeaths > 0 && '[+'+ item.deltadeaths +']'}</span> { item.deaths }</td>
                 </tr>)
               })}
               </tbody>
