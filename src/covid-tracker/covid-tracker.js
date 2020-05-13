@@ -2,38 +2,16 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import logo from '../logo.svg';
-import { Item } from '../item/item';
 
-class CovidTracker extends React.Component {
+class StatesTracker extends React.Component {
   state = {
-    feeds: null,
-    nationwide: null,
-    worldwide: null
+    feeds: null
   }
   componentDidMount() {
-    axios.get(`https://covid19.mathdro.id/api/confirmed`)
+    axios.get(`https://api.covid19india.org/data.json`)
     .then(res => {
-        //console.log(res.data);
-        const feeds = res.data;
+        const feeds = res.data ? res.data: null;
         this.setState({feeds: feeds});
-    })
-    .catch(err => {
-        console.log('Err: ', err);
-    });
-    axios.get(`https://covid19.mathdro.id/api/countries/IN`)
-    .then(res => {
-        //console.log('nationwide:', res.data);
-        const nationwide = res.data;
-        this.setState({nationwide: nationwide});
-    })
-    .catch(err => {
-        console.log('Err: ', err);
-    });
-    axios.get(`https://covid19.mathdro.id/api`)
-    .then(res => {
-        //console.log('worldwide: ', res.data);
-        const worldwide = res.data;
-        this.setState({worldwide: worldwide});
     })
     .catch(err => {
         console.log('Err: ', err);
@@ -42,61 +20,94 @@ class CovidTracker extends React.Component {
   render() {
     return <div className="covid-wrapper">
         {!this.state.feeds ? <img src={logo} className="App-logo" alt="logo" /> :
-        <section>
-          <h5>COVID 19, Coronavirus Tracker</h5>
-          <span className="text-muted small float-right"><Link to="/">Indian State Cases</Link></span>
-          {this.state.worldwide.lastUpdate && <p className="text-success">Last Updated: { this.state.worldwide.lastUpdate }</p>}
-          {!this.state.worldwide ? null :
-          <article>
-              <h2>Global Cases</h2>
-              <div className="row mb-5">
-                  <div className="col-sm-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-warning">{ this.state.worldwide.confirmed.value }</h3>
-                        <p className="card-text text-muted">Confirmed</p>
-                      </div>
+        <section className="text-center">
+           <h4>COVID 19, Coronavirus Tracker in India</h4>
+           <nav className="navbar sticky-top navbar-light bg-light">
+            <Link to="/world-tracker" className="navbar-brand">
+              <u>Worldwide Cases</u></Link>
+            <blockquote className="blockquote sticky-top">
+              <footer className="blockquote-footer">Designed by <cite title="Dharmendra Sehgal">Dharmendra Sehgal</cite></footer>
+            </blockquote>
+           </nav>
+           {this.state.feeds.statewise.map((item, index) => {
+           return (item.state === 'Total' &&
+           <article className="row mb-5" key={index}>
+              <div className="col-sm-3">
+                 <div className="card bg-danger">
+                    <div className="card-body p-3 text-light">
+                       <p>Confirmed</p>
+                       <h6><span>{item.deltaconfirmed > 0 && '[+'+ item.deltaconfirmed +']'}</span></h6>
+                       <h5>{ item.confirmed }</h5>
                     </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-danger">{ this.state.worldwide.deaths.value }</h3>
-                        <p className="card-text text-muted">Death</p>
-                      </div>
+                 </div>
+              </div>
+              <div className="col-sm-3">
+                 <div className="card bg-primary">
+                    <div className="card-body p-3 text-light">
+                       <p>Active</p>
+                       <h6><span><br /></span></h6>
+                       <h5>{ item.active }</h5>
                     </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title text-success">{ this.state.worldwide.recovered.value }</h3>
-                        <p className="card-text text-muted">Recovered</p>
-                      </div>
+                 </div>
+              </div>
+              <div className="col-sm-3">
+                 <div className="card bg-success">
+                    <div className="card-body p-3 text-light">
+                       <p>Recovered</p>
+                       <h6><span>{item.deltarecovered > 0 && '[+'+ item.deltarecovered +']'}</span></h6>
+                       <h5>{ item.recovered }</h5>
                     </div>
-                  </div>
+                 </div>
+              </div>
+              <div className="col-sm-3">
+                 <div className="card bg-secondary">
+                    <div className="card-body p-3 text-light">
+                       <p>Deceased</p>
+                       <h6><span>{item.deltadeaths > 0 && '[+'+ item.deltadeaths +']'}</span></h6>
+                       <h5>{ item.deaths }</h5>
+                    </div>
+                 </div>
               </div>
            </article>
-            }
-          <div className="text-center">
-            <table className="m-auto">
-              <thead className="">
-                <tr>
-                  <th className="text-left" scope="col">Country/Region</th>
-                  <th scope="col">Confirmed</th>
-                  <th scope="col">Deaths</th>
-                  <th scope="col">Recovered</th>
-                </tr>
-              </thead>
-              <tbody>
-              {this.state.feeds.map((item, index) => {
-                return (<Item {...item} key={index} />)
-              })}
-              </tbody>
-            </table>
-          </div>
+           )
+           })
+           }
+           {!this.state.feeds.statewise ? null :
+           <article>
+              <div className="text-center">
+                 <table className="m-auto">
+                    <thead>
+                       <tr>
+                          <th className="text-default text-left" scope="col">State/UT</th>
+                          <th className="text-default" scope="col">Confirmed</th>
+                          <th className="text-default" scope="col">Active</th>
+                          <th className="text-default" scope="col">Recovered</th>
+                          <th className="text-default" scope="col">Deceased</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                       {this.state.feeds.statewise.map((item, index) => {
+                       return (item.state !== 'Total' &&
+                       <tr key={index}>
+                          <td className="text-muted text-left">{ item.state }</td>
+                          <td className="text-muted text-right"><span className="text-danger">{item.deltaconfirmed > 0 && '[+'+ item.deltaconfirmed +']'}</span> { item.confirmed }</td>
+                          <td className="text-muted text-right">{ item.active }</td>
+                          <td className="text-muted text-right"><span className="text-success">{item.deltarecovered > 0 && '[+'+ item.deltarecovered +']'}</span> { item.recovered }</td>
+                          <td className="text-muted text-right"><span>{item.deltadeaths > 0 && '[+'+ item.deltadeaths +']'}</span> { item.deaths }</td>
+                       </tr>
+                       )
+                       })}
+                    </tbody>
+                 </table>
+              </div>
+              <nav class="navbar fixed-bottom navbar-light bg-light">
+               <span className="navbar-brand"><a className="navbar-item" href="https://api.covid19india.org/" target="_blank" rel="noopener noreferrer">COVID19-India API</a></span>
+              </nav>
+           </article>
+           }
         </section>
         }
     </div>
   }
 }
-export default CovidTracker;
+export default StatesTracker;

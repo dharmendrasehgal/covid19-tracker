@@ -10,23 +10,23 @@ function App() {
   return (
     <div className="App m-5">
       <header className="App-header">
-        <blockquote className="blockquote sticky-top">
-          <footer className="blockquote-footer">Designed by <cite title="Dharmendra Sehgal">Dharmendra Sehgal</cite></footer>
-        </blockquote>
         <Router>
             <Switch>
               <Route exact path="/">
-                <StatesTracker />
-              </Route>
-              <Route exact path="/indian-states">
-                <StatesTracker />
-              </Route>
-              <Route path="/covid19-tracker">
                 <CovidTracker />
+              </Route>
+              <Route exact path="/covid19-tracker">
+                <CovidTracker />
+              </Route>
+              <Route path="/world-tracker">
+                <StatesTracker />
               </Route>
             </Switch>
         </Router>
       </header>
+      <nav class="navbar fixed-bottom navbar-light bg-light">
+       <span className="navbar-brand">Data sources from <a className="navbar-item" href="https://github.com/mathdroid/covid-19-api" target="_blank" rel="noopener noreferrer">COVID-19 global data (from JHU CSSE for now) as-a-service</a></span>
+      </nav>
     </div>
   );
 }
