@@ -32,7 +32,7 @@ class StatesTracker extends React.Component {
            {this.state.feeds.statewise.map((item, index) => {
            return (item.state === 'Total' &&
            <article className="row mb-5" key={index}>
-              <div className="col-sm-3">
+              <div className="col-sm-3 mb-5">
                  <div className="card bg-danger">
                     <div className="card-body p-3 text-light">
                        <p>Confirmed</p>
@@ -41,7 +41,7 @@ class StatesTracker extends React.Component {
                     </div>
                  </div>
               </div>
-              <div className="col-sm-3">
+              <div className="col-sm-3 mb-5">
                  <div className="card bg-primary">
                     <div className="card-body p-3 text-light">
                        <p>Active</p>
@@ -50,7 +50,7 @@ class StatesTracker extends React.Component {
                     </div>
                  </div>
               </div>
-              <div className="col-sm-3">
+              <div className="col-sm-3 mb-5">
                  <div className="card bg-success">
                     <div className="card-body p-3 text-light">
                        <p>Recovered</p>
@@ -59,7 +59,7 @@ class StatesTracker extends React.Component {
                     </div>
                  </div>
               </div>
-              <div className="col-sm-3">
+              <div className="col-sm-3 mb-5">
                  <div className="card bg-secondary">
                     <div className="card-body p-3 text-light">
                        <p>Deceased</p>

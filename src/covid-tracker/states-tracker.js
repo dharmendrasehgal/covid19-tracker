@@ -51,7 +51,7 @@ class CovidTracker extends React.Component {
               {!this.state.worldwide ? null :
               <article>
                  <div className="row mb-5">
-                    <div className="col-sm-4">
+                    <div className="col-sm-4 mb-5">
                        <div className="card bg-danger">
                           <div className="card-body text-light">
                              <h3 className="card-title">{ this.state.worldwide.confirmed.value }</h3>
@@ -59,7 +59,7 @@ class CovidTracker extends React.Component {
                           </div>
                        </div>
                     </div>
-                    <div className="col-sm-4">
+                    <div className="col-sm-4 mb-5">
                        <div className="card bg-success">
                           <div className="card-body text-light">
                              <h3 className="card-title">{ this.state.worldwide.recovered.value }</h3>
@@ -67,7 +67,7 @@ class CovidTracker extends React.Component {
                           </div>
                        </div>
                     </div>
-                    <div className="col-sm-4">
+                    <div className="col-sm-4 mb-5">
                        <div className="card bg-secondary">
                           <div className="card-body text-light">
                              <h3 className="card-title">{ this.state.worldwide.deaths.value }</h3>
