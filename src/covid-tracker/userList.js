@@ -1,43 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
+import { useFetch } from "../hooks/useFetch";
 
 const UserList = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
   const isComponentMounted = useRef(true);
 
-  useEffect(() => {
-    if (isComponentMounted.current) {
-      setLoading(true);
-      (async () => {
-        try {
-          const response = await fetch(
-            "https://jsonplaceholder.typicode.com/users"
-          ).then(res => res.clone().json());
-          console.log(response);
-          setUsers(response);
-        } catch (err) {
-          throw new Error(err);
-        } finally {
-          setLoading(false);
-        }
-      })();
-    }
-    return () => {
-      isComponentMounted.current = false;
-    };
-  }, []);
+  const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/users', isComponentMounted, []);
   return (
     <div>
       {loading ? (
         <div>Loading data...</div>
       ) : (
-        users.map((user) => (
+        data.map((user) => (
           <div key={user.id}>
             <h3>{user.name}</h3>
             <p>{user.email}</p>
           </div>
         ))
       )}
+      {error}
     </div>
   );
 };
