@@ -24,7 +24,7 @@ function App() {
             </Switch>
         </Router>
       </header>
-      <nav class="navbar fixed-bottom navbar-light bg-light">
+      <nav className="navbar fixed-bottom navbar-light bg-light">
        <span className="navbar-brand">Data sources from <a className="navbar-item" href="https://github.com/mathdroid/covid-19-api" target="_blank" rel="noopener noreferrer">COVID-19 global data (from JHU CSSE for now) as-a-service</a></span>
       </nav>
     </div>

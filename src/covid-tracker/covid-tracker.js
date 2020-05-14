@@ -1,25 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import axios from 'axios';
 import logo from '../logo.svg';
 
-class StatesTracker extends React.Component {
-  state = {
-    feeds: null
-  }
-  componentDidMount() {
-    axios.get(`https://api.covid19india.org/data.json`)
-    .then(res => {
-        const feeds = res.data ? res.data: null;
-        this.setState({feeds: feeds});
-    })
-    .catch(err => {
-        console.log('Err: ', err);
-    });
-  }
-  render() {
-    return <div className="covid-wrapper">
-        {!this.state.feeds ? <img src={logo} className="App-logo" alt="logo" /> :
+const StatesTracker = () => {
+  const [feeds, setFeeds] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const isComponentMounted = useRef(true);
+
+  useEffect(() => {
+        if (isComponentMounted.current) {
+          setLoading(true);
+          (async () => {
+            try {
+              const response = await fetch(
+                "https://api.covid19india.org/data.json"
+              ).then(res => res.clone().json());
+              setFeeds(response.statewise);
+            } catch (err) {
+              throw new Error(err);
+            } finally {
+              setLoading(false);
+            }
+          })();
+        }
+        return () => {
+          isComponentMounted.current = false;
+        };
+      }, []);
+
+    return (<div className="covid-wrapper">
+        {loading ? (<img src={logo} className="App-logo" alt="logo" />) :
         <section className="text-center">
            <h4>COVID 19, Coronavirus Tracker in India</h4>
            <nav className="navbar sticky-top navbar-light bg-light">
@@ -29,7 +39,7 @@ class StatesTracker extends React.Component {
               <footer className="blockquote-footer">Designed by <cite title="Dharmendra Sehgal">Dharmendra Sehgal</cite></footer>
             </blockquote>
            </nav>
-           {this.state.feeds.statewise.map((item, index) => {
+           {feeds.map((item, index) => {
            return (item.state === 'Total' &&
            <article className="row mb-5" key={index}>
               <div className="col-sm-3 mb-5">
@@ -72,7 +82,7 @@ class StatesTracker extends React.Component {
            )
            })
            }
-           {!this.state.feeds.statewise ? null :
+           { loading ? null :
            <article>
               <div className="text-center">
                  <table className="m-auto">
@@ -86,7 +96,7 @@ class StatesTracker extends React.Component {
                        </tr>
                     </thead>
                     <tbody>
-                       {this.state.feeds.statewise.map((item, index) => {
+                       {feeds.map((item, index) => {
                        return (item.state !== 'Total' &&
                        <tr key={index}>
                           <td className="text-muted text-left">{ item.state }</td>
@@ -100,14 +110,13 @@ class StatesTracker extends React.Component {
                     </tbody>
                  </table>
               </div>
-              <nav class="navbar fixed-bottom navbar-light bg-light">
+              <nav className="navbar fixed-bottom navbar-light bg-light">
                <span className="navbar-brand"><a className="navbar-item" href="https://api.covid19india.org/" target="_blank" rel="noopener noreferrer">COVID19-India API</a></span>
               </nav>
            </article>
            }
         </section>
         }
-    </div>
-  }
+    </div>);
 }
 export default StatesTracker;
